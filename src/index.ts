@@ -13,6 +13,7 @@ mongoose.connect("mongodb://localhost:27017/locations", {
     console.log("connected to database");
 });
 
+
 const app = express();
 app.use(json());
 
