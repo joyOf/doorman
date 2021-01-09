@@ -14,7 +14,7 @@ interface ILocationDocument extends mongoose.Document {
 }
 
 const _locationModelFactory = new LocationModelFactory();
-const model = _locationModelFactory.locationModelFactory();
+const model = _locationModelFactory.Create();
 
 class Location {
     constructor() { }
@@ -23,13 +23,12 @@ class Location {
         return new model(attr);
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    public async GetAll() {
+    public async GetAll(): Promise<ILocationDocument[]> {
         const result = await model.find({});
         return result;
     }
 
-    public async Get(id: string) {
+    public async Get(id: string): Promise<ILocationDocument> {
         return await model.findById(id);
     }
 }

@@ -10,7 +10,7 @@ interface ILocationDocument extends mongoose.Document {
 class LocationModelFactory {
     private _locationSchema = new mongoose.Schema(locationSchema);
 
-    locationModelFactory(): mongoose.Model<ILocationDocument> {
+    Create(): mongoose.Model<ILocationDocument> {
         return mongoose.model<ILocationDocument, mongoose.Model<ILocationDocument>>("Location", this._locationSchema);
     }
 }

@@ -5,8 +5,6 @@ const router = express.Router();
 const location = new Location();
 
 router.post("/api/locations", async (req: Request, res: Response) => {
-    console.log("routed to locations");
-
     const newLocation = location.Create({ title: req.body.title, description: req.body.description, address: req.body.address });
 
     try {
