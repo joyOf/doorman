@@ -4,6 +4,7 @@ import qrCode from "qrcode";
 import path from "path";
 import fs from "fs";
 import { IUser, User } from "../domain/user";
+import amqp from "amqplib/callback_api";
 
 const router = express.Router();
 const location = new Location();
@@ -68,9 +69,40 @@ router.get("/api/locations/:id/visit", async (req: Request, res: Response) => {
 // create a visit
 router.post("/api/locations/:locationId/users/:userId", async (req: Request, res: Response) => {
     try {
-        // send message to VisitorService with locationId and userId
+        amqp.connect("amqp://localhost", (error0, connection) => {
+            if (error0) {
+                throw error0;
+            }
+            connection.createChannel((error1, channel) => {
+                if (error1) {
+                    throw error1;
+                }
+                const queue = "visit";
+                // todo: create interface
+                const message = [{
+                    type: "VisitCreated",
+                    locationId: req.params.locationId,
+                    userId: req.params.userId
+                }];
+
+                channel.assertQueue(queue, {
+                    durable: false
+                });
+
+                channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)));
+                console.log(" [x] Sent %s", message);
+
+                setTimeout(() => {
+                    connection.close();
+                    process.exit(0);
+                }, 500);
+            });
+        });
+
+        return res.status(200);
     } catch (ex) {
         console.log(ex);
+        return res.status(500);
     }
 });
 
