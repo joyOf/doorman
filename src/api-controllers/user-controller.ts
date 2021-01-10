@@ -18,17 +18,13 @@ router.post("/api/users", async (req: Request, res: Response) => {
 });
 
 router.get("/api/users", async (req: Request, res: Response) => {
-    const result = user.GetAll();
-    result.then(result => {
-        return res.status(200).send(result);
-    });
+    const result = await user.GetAll();
+    return res.status(200).send(result);
 });
 
-router.get("/api/users/:id", async (req: Request, res: Response) => {
-    const result = user.Get(req.params.id);
-    result.then(result => {
-        return res.status(200).send(result);
-    });
+router.get("/api/users/:Id", async (req: Request, res: Response) => {
+    const result = await user.Get(req.params.Id);
+    return res.status(200).send(result);
 });
 
 export { router as userController };
